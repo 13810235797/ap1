@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>AP1 交互式2D分形：Sierpiński 垫片 + N边形混沌游戏 + Mandelbrot/Julia</title>
+<style>
+body{
+    font-family: "Microsoft YaHei", sans-serif;
+    display:flex; gap:14px; padding:12px; margin:0;
+    background:#111; color:#fff;
+}
+.control-panel{
+    min-width:250px; max-width:280px; line-height:1.9;
+}
+.control-panel section{
+    border-top:1px solid #333; margin-top:10px; padding-top:8px;
+}
+button{
+    padding:4px 10px; margin:2px; cursor:pointer; background:#2a2a2a;
+    color:#fff; border:1px solid #555; border-radius:4px;
+}
+button:hover{ background:#3a3a3a; }
+input[type=range]{ width:150px; vertical-align:middle; }
+canvas{ border:1px solid #333; background:#000; }
+#modeTip{ color:#ffcc00; font-size:14px; margin:6px 0; min-height:20px; }
+small{ color:#999; }
+</style>
+</head>
+<body>
+<div class="control-panel">
+  <h3 style="margin-top:0;">AP1 控制面板</h3>
+
+  <section>
+    <div>渲染模式：</div>
+    <button onclick="setMode(0)">POINTS 点云</button>
+    <button onclick="setMode(1)">LINES 线框</button>
+    <button onclick="setMode(2)">TRIANGLES 实体</button>
+    <p id="modeTip"></p>
+  </section>
+
+  <section>
+    <div>多边形边数（混沌游戏）:
+      <input type="range" min="3" max="6" value="3" id="nSlider">
+      <span id="nVal">3</span>
+    </div>
+    <div>递归深度:
+      <input type="range" min="0" max="6" value="4" id="subSlider">
+      <span id="subVal">4</span>
+    </div>
+    <div>点大小:
+      <input type="range" min="1" max="8" step="0.5" value="2" id="pointSlider">
+      <span id="pointVal">2</span>
+    </div>
+    <div>点云总点数:
+      <input type="range" min="5000" max="50000" step="1000" value="8000" id="pointCountSlider">
+      <span id="pointCountVal">8000</span>
+    </div>
+  </section>
+
+  <section>
+    <div>配色方案：</div>
+    <button onclick="changeColor(0)">配色A</button>
+    <button onclick="changeColor(1)">配色B</button>
+    <button onclick="changeColor(2)">配色C</button>
+  </section>
+
+  <section>
+    <div><button onclick="toggleAnim()">暂停/播放动画(空格)</button></div>
+  </section>
+
+  <section>
+    <div>E2 · 分形探索器：</div>
+    <button id="fractBtn" onclick="toggleFractal()">Mandelbrot/Julia 探索器 (m)</button>
+    <div>迭代次数:
+      <input type="range" min="50" max="500" step="10" value="180" id="iterSlider" disabled style="opacity:0.4;">
+      <span id="iterVal">180</span>
+    </div>
+    <small>进入后：左键平移 · 滚轮缩放 · j 切换 Mandelbrot/Julia · Esc 退出</small>
+  </section>
+
+  <p style="color:#999; font-size:13px; margin-top:14px;">
+    操作提示：<br>
+    1 / 2 / 3 — 切换渲染模式<br>
+    空格 — 启停逐点生长动画<br>
+    m — 进入/退出分形探索器<br>
+    j — Mandelbrot / Julia 切换<br>
+    左键拖拽平移 · 滚轮缩放
+  </p>
+</div>
+
+<canvas id="webgl" width="700" height="700"></canvas>
+
+<!-- 课程配套 WebGL 工具库 -->
+<script src="Common/webgl-utils.js"></script>
+<script src="Common/initShaders.js"></script>
+<script src="Common/MV.js"></script>
+
+<!-- 应用代码：着色器 → 几何 → 分形(E2) → 主程序 → 交互 → UI -->
+<script src="shaders.js"></script>
+<script src="geometry.js"></script>
+<script src="fractal.js"></script>
+<script src="main.js"></script>
+<script src="interaction.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>
